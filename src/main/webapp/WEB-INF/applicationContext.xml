@@ -16,7 +16,7 @@
         <property name="packagesToScan" value="ru.course.model"/>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL94Dialect</prop>
+                <prop key="hibernate.dialect">${db.hibernate.dialect}</prop>
                 <prop key="hibernate.connection.driver_class">${db.driver}</prop>
                 <prop key="hibernate.connection.url">${db.url}</prop>
                 <prop key="hibernate.connection.username">${db.username}</prop>
