@@ -31,8 +31,6 @@ public class HibernateUsersStorage extends AbstractHibernateStorage<User> implem
         if (filter.lastName != null) criteria.add(Restrictions.eq("secondName", filter.lastName));
         if (filter.middleName != null) criteria.add(Restrictions.eq("middleName", filter.middleName));
         if (filter.citizenshipCode != null) criteria.add(Restrictions.eq("citizenship.code", filter.citizenshipCode));
-        //ToDo: возможно вместо docCode должен быть docNumber?
-        if (filter.docCode != null) criteria.add(Restrictions.eq("document.document.code", filter.docCode));
         if (filter.phone != null) criteria.add(Restrictions.eq("phone", filter.phone));
         if (filter.position != null) criteria.add(Restrictions.eq("position", filter.position));
         return criteria.list();

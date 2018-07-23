@@ -10,6 +10,5 @@ public class UserFilterDto {
     public String middleName;
     public String position;
     public String phone;
-    public Integer docCode;
     public Integer citizenshipCode;
 }
