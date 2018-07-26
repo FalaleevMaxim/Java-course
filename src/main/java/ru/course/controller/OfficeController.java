@@ -1,75 +1,64 @@
 package ru.course.controller;
 
-import ma.glasnost.orika.MapperFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.course.controller.advice.NotFoundException;
 import ru.course.dto.ResponseDto;
 import ru.course.dto.SuccessResponseDto;
 import ru.course.dto.office.OfficeCreateDto;
 import ru.course.dto.office.OfficeDto;
 import ru.course.dto.office.OfficeFilterDto;
 import ru.course.dto.office.OfficeListItemDto;
-import ru.course.model.office.Office;
-import ru.course.storage.office.OfficeStorage;
-import ru.course.storage.organizations.OrganizationsStorage;
+import ru.course.service.office.OfficeService;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static ru.course.util.ResponseUtil.dataResponse;
-import static ru.course.util.ResponseUtil.errorResponse;
+import static ru.course.util.ResponseUtil.*;
 
 @RestController
 @RequestMapping(value = "/api/office", produces = APPLICATION_JSON_VALUE)
 public class OfficeController {
-    private final OfficeStorage officeStorage;
-    private final OrganizationsStorage organizationsStorage;
-    private final MapperFactory mapperFactory;
+    private final OfficeService service;
 
     @Autowired
-    public OfficeController(OfficeStorage officeStorage, OrganizationsStorage organizationsStorage, MapperFactory mapperFactory) {
-        this.officeStorage = officeStorage;
-        this.organizationsStorage = organizationsStorage;
-        this.mapperFactory = mapperFactory;
+    public OfficeController(OfficeService service) {
+        this.service = service;
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public ResponseEntity<ResponseDto<List<OfficeListItemDto>>> list(@RequestBody @Valid OfficeFilterDto filter) {
-        return dataResponse(officeStorage.filter(filter.orgId, filter.name, filter.phone, filter.isActive).stream()
-                .map(mapperFactory.getMapperFacade(Office.class, OfficeListItemDto.class)::map)
-                .collect(Collectors.toList()));
+    public ResponseEntity<ResponseDto<List<OfficeListItemDto>>> list(@RequestBody @Valid OfficeFilterDto filter, BindingResult binding) {
+        if (binding.hasErrors()) {
+            return errorResponse(binding);
+        }
+        return dataResponse(service.filter(filter));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<ResponseDto<OfficeDto>> get(@PathVariable int id) {
-        Office office = officeStorage.get(id);
+        OfficeDto office = service.get(id);
         if (office == null) return errorResponse("Office not found", HttpStatus.NOT_FOUND);
-        OfficeDto dto = mapperFactory.getMapperFacade(Office.class, OfficeDto.class).map(office);
-        return dataResponse(dto);
+        return dataResponse(office);
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public SuccessResponseDto save(@RequestBody @Valid OfficeCreateDto dto) {
-        if (dto.getOrgId() != null && !organizationsStorage.contains(dto.getOrgId())) {
-            throw new NotFoundException("Organization by id " + dto.getOrgId() + " not found");
+    public ResponseEntity<ResponseDto<SuccessResponseDto>> save(@RequestBody @Valid OfficeCreateDto dto, BindingResult binding) {
+        if (binding.hasErrors()) {
+            return errorResponse(binding);
         }
-        Office office = mapperFactory.getMapperFacade(OfficeDto.class, Office.class).map(dto);
-        officeStorage.save(office);
-        return new SuccessResponseDto();
+        service.save(dto);
+        return successResponse();
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public SuccessResponseDto update(@RequestBody @Valid OfficeDto dto) {
-        Office office = mapperFactory.getMapperFacade(OfficeDto.class, Office.class).map(dto);
-        officeStorage.update(office);
-        return new SuccessResponseDto();
+    public ResponseEntity<ResponseDto<SuccessResponseDto>> update(@RequestBody @Valid OfficeDto dto, BindingResult binding) {
+        if (binding.hasErrors()) {
+            return errorResponse(binding);
+        }
+        service.update(dto);
+        return successResponse();
     }
 }
