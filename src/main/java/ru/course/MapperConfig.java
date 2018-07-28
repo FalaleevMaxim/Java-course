@@ -19,7 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 @Configuration
-public class Config {
+public class MapperConfig {
     @Bean
     MapperFactory mapperFactory() {
         DefaultMapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
