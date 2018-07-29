@@ -7,8 +7,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "user_document", indexes = {
-        @Index(name = "userdoc_id", columnList = "user_id", unique = true),
-        @Index(name = "userdoc_code", columnList = "doc_code")
+        @Index(name = "userdoc_id", columnList = "user_id", unique = true)
 })
 public class UserDocument {
     private int id;
