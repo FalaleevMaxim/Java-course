@@ -3,7 +3,8 @@
 <suite name="All Test Suite">
     <test verbose="2" preserve-order="true" name="C:/Users/Admin/IdeaProjects/restdbapp/src/test/resources">
         <classes>
-            <class name="ru.course.integration.OrganizationControllerIT"/>
+            <class name="ru.course.integration.tests.BeforeIT"/>
+            <class name="ru.course.integration.tests.OrganizationControllerIT"/>
         </classes>
     </test>
 </suite>
