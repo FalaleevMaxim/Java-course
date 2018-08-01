@@ -88,9 +88,15 @@ CREATE TABLE users
   secondname character varying(255),
   citizenship_code integer,
   office_id integer,
+  docdate date,
+  docnumber character varying(255),
+  doc_code integer,
   CONSTRAINT users_pkey PRIMARY KEY (id),
   CONSTRAINT user_citizenship_fk FOREIGN KEY (citizenship_code)
       REFERENCES countries (code) MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE NO ACTION,
+  CONSTRAINT doc_code_fk FOREIGN KEY (doc_code)
+      REFERENCES documents (code) MATCH SIMPLE
       ON UPDATE CASCADE ON DELETE NO ACTION,
   CONSTRAINT user_office_fk FOREIGN KEY (office_id)
       REFERENCES office (id) MATCH SIMPLE
@@ -101,32 +107,10 @@ WITH (
 );
 ALTER TABLE users
   OWNER TO postgres;
-  
--- Table: user_document
-CREATE TABLE user_document
-(
-  id serial NOT NULL,
-  docdate date,
-  docnumber character varying(255),
-  user_id integer NOT NULL,
-  doc_code integer,
-  CONSTRAINT user_document_pkey PRIMARY KEY (id),
-  CONSTRAINT doc_code_fk FOREIGN KEY (doc_code)
-      REFERENCES documents (code) MATCH SIMPLE
-      ON UPDATE CASCADE ON DELETE NO ACTION,
-  CONSTRAINT doc_user_fk FOREIGN KEY (user_id)
-      REFERENCES users (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE user_document
-  OWNER TO postgres;
 
 -- Index: userdoc_code
 CREATE INDEX userdoc_code
-  ON user_document
+  ON users
   USING btree
   (doc_code);
 

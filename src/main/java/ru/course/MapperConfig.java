@@ -132,10 +132,6 @@ public class MapperConfig {
             public void mapAtoB(UserUpdateDto dto, User user, MappingContext context) {
                 userCreateDtoMapper().mapAtoB(dto, user, context);
                 user.setId(dto.id);
-                if(user.getDocument()!=null){
-                    Integer udId = userStorage.userDocumentId(user);
-                    user.getDocument().setId(dto.id);
-                }
             }
         };
     }

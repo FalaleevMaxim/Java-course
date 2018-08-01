@@ -84,8 +84,8 @@ public class User {
         this.phone = phone;
     }
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @LazyToOne(LazyToOneOption.FALSE)
+    /*@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @LazyToOne(LazyToOneOption.FALSE)*/
     public UserDocument getDocument() {
         return document;
     }

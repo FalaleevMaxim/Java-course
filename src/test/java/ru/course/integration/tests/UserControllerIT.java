@@ -33,7 +33,7 @@ public class UserControllerIT extends AbstractIT {
         assertOk(dto);
         assertEquals(response.getStatusCode(), HttpStatus.OK);
         UserDto user = dto.data;
-        assertEquals(user.id, Integer.valueOf(1), "Wrong user id");
+        assertEquals(user.id, Integer.valueOf(2), "Wrong user id");
         assertNotNull(user.docCode, "Document code is null");
         assertNotNull(user.docName, "Document name is null");
     }
