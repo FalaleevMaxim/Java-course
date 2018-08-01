@@ -3,6 +3,7 @@ package ru.course.model.user;
 import ru.course.model.dictionary.Document;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.Date;
 
 @Entity
@@ -17,6 +18,7 @@ public class UserDocument {
     private User user;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -53,14 +55,14 @@ public class UserDocument {
         this.docDate = docDate;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-        if(user.getDocument()==null) user.setDocument(this);
+        if(user.getDocument().isEmpty()) user.setDocument(Collections.singletonList(this));
     }
 }

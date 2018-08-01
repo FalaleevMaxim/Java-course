@@ -105,11 +105,12 @@ ALTER TABLE users
 -- Table: user_document
 CREATE TABLE user_document
 (
+  id serial NOT NULL,
   docdate date,
   docnumber character varying(255),
   user_id integer NOT NULL,
   doc_code integer,
-  CONSTRAINT user_document_pkey PRIMARY KEY (user_id),
+  CONSTRAINT user_document_pkey PRIMARY KEY (id),
   CONSTRAINT doc_code_fk FOREIGN KEY (doc_code)
       REFERENCES documents (code) MATCH SIMPLE
       ON UPDATE CASCADE ON DELETE NO ACTION,

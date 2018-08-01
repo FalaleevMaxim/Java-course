@@ -99,7 +99,7 @@ public class MapperConfig {
                     Document document = new Document();
                     document.setCode(dto.docCode);
                     userDocument.setDocument(document);
-                    user.setDocument(userDocument);
+                    userDocument.setUser(user);
                 }
                 if (dto.citizenshipCode != null) {
                     Country country = new Country();
@@ -121,7 +121,7 @@ public class MapperConfig {
             public void mapAtoB(UserUpdateDto dto, User user, MappingContext context) {
                 userCreateDtoMapper().mapAtoB(dto, user, context);
                 user.setId(dto.id);
-                if(user.getDocument()!=null) user.getDocument().setId(dto.id);
+                if(!user.getDocument().isEmpty()) user.getDocument().get(0).setId(dto.id);
             }
         };
     }
@@ -142,11 +142,11 @@ public class MapperConfig {
                 dto.phone = user.getPhone();
                 dto.position = user.getPosition();
                 dto.isIdentified = user.isIdentified();
-                if(user.getDocument()!=null) {
-                    dto.docCode = user.getDocument().getDocument().getCode();
-                    dto.docName = user.getDocument().getDocument().getName();
-                    dto.docNumber = user.getDocument().getDocNumber();
-                    dto.docDate = new SimpleDateFormat("dd/mm/yyyy").format(user.getDocument().getDocDate());
+                if(!user.getDocument().isEmpty()) {
+                    dto.docCode = user.getDocument().get(0).getDocument().getCode();
+                    dto.docName = user.getDocument().get(0).getDocument().getName();
+                    dto.docNumber = user.getDocument().get(0).getDocNumber();
+                    dto.docDate = new SimpleDateFormat("dd/mm/yyyy").format(user.getDocument().get(0).getDocDate());
                 }
                 if(user.getCitizenship()!=null){
                     dto.citizenshipCode = user.getCitizenship().getCode();

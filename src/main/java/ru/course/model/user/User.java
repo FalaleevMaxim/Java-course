@@ -1,10 +1,14 @@
 package ru.course.model.user;
 
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 import ru.course.model.dictionary.Country;
 import ru.course.model.office.Office;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "users", indexes = {
@@ -82,17 +86,17 @@ public class User {
         this.phone = phone;
     }
 
-    @OneToOne(mappedBy = "user",
-            fetch = FetchType.LAZY,
-            cascade=CascadeType.ALL,
-            optional=false)
-    public UserDocument getDocument() {
-        return document;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    public List<UserDocument> getDocument() {
+        return Collections.singletonList(document);
     }
 
-    public void setDocument(UserDocument document) {
-        this.document = document;
-        if(document.getUser()==null) document.setUser(this);
+    public void setDocument(List<UserDocument> document) {
+        if (document == null || document.isEmpty()) {
+            this.document = null;
+        } else {
+            this.document = document.get(0);
+        }
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

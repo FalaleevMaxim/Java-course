@@ -106,7 +106,7 @@ public class UserControllerIT extends AbstractIT {
         ResponseEntity<String> response = post("/api/user/save", user);
         ResponseDto<SuccessDto> dto = reader.read(response.getBody(), SuccessDto.class);
         assertError(dto);
-        assertEquals(response.getStatusCode(), HttpStatus.UNPROCESSABLE_ENTITY);
+        assertEquals(response.getStatusCode(), HttpStatus.UNPROCESSABLE_ENTITY, "Wrong code. Error: " + dto.error + ". ");
     }
 
     @Test
