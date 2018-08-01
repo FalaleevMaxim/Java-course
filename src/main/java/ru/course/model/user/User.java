@@ -18,7 +18,7 @@ import javax.persistence.*;
         @Index(name = "user_phone", columnList = "phone"),
 })
 public class User {
-    private int id;
+    private Integer id;
     private String firstName;
     private String secondName;
     private String middleName;
@@ -30,12 +30,12 @@ public class User {
     private boolean identified;
 
     @Id
-    @GeneratedValue
-    public int getId() {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

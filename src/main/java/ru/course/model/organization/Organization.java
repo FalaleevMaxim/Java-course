@@ -23,7 +23,7 @@ public class Organization {
     private boolean isActive;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }

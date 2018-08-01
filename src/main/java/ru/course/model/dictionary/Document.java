@@ -14,7 +14,7 @@ public class Document implements Serializable {
     private String name;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }

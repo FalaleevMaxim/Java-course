@@ -24,6 +24,11 @@
         <hibernate.version>5.0.12.Final</hibernate.version>
         <spring.version>5.0.7.RELEASE</spring.version>
         <tomcat.version>9.0.0.M22</tomcat.version>
+
+        <db.driver>org.postgresql.Driver</db.driver>
+        <db.url>jdbc:postgresql://localhost:5432/restAppDb</db.url>
+        <db.username>postgres</db.username>
+        <db.password>12345</db.password>
     </properties>
 
     <dependencies>
@@ -105,9 +110,9 @@
                     <fork>true</fork>
                     <mainClass>ru.course.Application</mainClass>
                     <addResources>true</addResources>
-                    <!-- <jvmArguments> -->
-                    <!-- -agentlib:jdwp=transport=dt_socket,address=localhost:5005,server=y,suspend=n -->
-                    <!-- </jvmArguments> -->
+                     <jvmArguments>
+                     -agentlib:jdwp=transport=dt_socket,address=localhost:5005,server=y,suspend=n
+                     </jvmArguments>
                 </configuration>
                 <executions>
                     <execution>
@@ -128,6 +133,41 @@
                         <goals>
                             <goal>stop</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.5</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>9.1-901-1.jdbc4</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <driver>${db.driver}</driver>
+                    <url>${db.url}</url>
+                    <username>${db.username}</username>
+                    <password>${db.password}</password>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>prepareDbForIT</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <!-- specify your SQL commands, can be all of the following configurations -->
+                            <srcFiles>
+                                <srcFile>src/main/resources/schema.sql</srcFile>
+                                <srcFile>src/main/resources/data.sql</srcFile>
+                            </srcFiles>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

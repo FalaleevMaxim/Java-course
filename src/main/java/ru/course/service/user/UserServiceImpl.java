@@ -30,8 +30,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserListItemDto> filter(UserFilterDto filter) {
-        return userStorage.filter(filter).stream()
-                .map(mapperFactory.getMapperFacade(User.class, UserListItemDto.class)::map)
+        List<User> list = userStorage.filter(filter);
+        return list.stream()
+                //.map(mapperFactory.getMapperFacade(User.class, UserListItemDto.class)::map)
+                .map(user -> {
+                    UserListItemDto dto = new UserListItemDto();
+                    dto.id = user.getId();
+                    dto.firstName = user.getFirstName();
+                    dto.middleName = user.getMiddleName();
+                    dto.secondName = user.getSecondName();
+                    dto.position = user.getPosition();
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -53,7 +63,7 @@ public class UserServiceImpl implements UserService {
         if (dto.docCode != null && !dictionaries.containsDocumentCode(dto.docCode)) {
             throw new NotFoundException("Document by code " + dto.docCode + " not found");
         }
-        User user = mapperFactory.getMapperFacade(UserDto.class, User.class).map(dto);
+        User user = mapperFactory.getMapperFacade(UserCreateDto.class, User.class).map(dto);
         userStorage.save(user);
     }
 
@@ -68,7 +78,7 @@ public class UserServiceImpl implements UserService {
         if (dto.docCode != null && !dictionaries.containsDocumentCode(dto.docCode)) {
             throw new NotFoundException("Document by code " + dto.docCode + " not found");
         }
-        User user = mapperFactory.getMapperFacade(UserDto.class, User.class).map(dto);
+        User user = mapperFactory.getMapperFacade(UserUpdateDto.class, User.class).map(dto);
         userStorage.update(user);
     }
 }

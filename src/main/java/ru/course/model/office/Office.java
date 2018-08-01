@@ -12,7 +12,7 @@ import javax.persistence.*;
         @Index(name = "office_active", columnList = "active")
 })
 public class Office {
-    private int id;
+    private Integer id;
     private Organization organization;
     private String name;
     private String address;
@@ -20,12 +20,12 @@ public class Office {
     private boolean isActive = true;
 
     @Id
-    @GeneratedValue
-    public int getId() {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

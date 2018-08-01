@@ -1,10 +1,7 @@
-package ru.course.dto.user;
-
-import javax.validation.constraints.NotNull;
+package ru.course.integration.dto.user;
 
 public class UserFilterDto {
-    @NotNull
-    public Integer officeId;
+    public int officeId;
     public String firstName;
     public String lastName;
     public String middleName;

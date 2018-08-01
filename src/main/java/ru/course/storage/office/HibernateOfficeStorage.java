@@ -25,7 +25,7 @@ public class HibernateOfficeStorage extends AbstractHibernateStorage<Office> imp
     public List<Office> filter(int orgId, String name, String phone, Boolean isActive) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Office.class);
         criteria.add(Restrictions.eq("organization.id", orgId));
-        if (name != null) Restrictions.like("name", name, MatchMode.ANYWHERE);
+        if (name != null) criteria.add(Restrictions.like("name", name, MatchMode.ANYWHERE));
         if (phone != null) criteria.add(Restrictions.eq("phone", phone));
         if (isActive != null) criteria.add(Restrictions.eq("active", isActive));
         return criteria.list();

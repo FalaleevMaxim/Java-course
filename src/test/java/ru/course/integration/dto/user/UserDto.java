@@ -1,4 +1,4 @@
-package ru.course.dto.user;
+package ru.course.integration.dto.user;
 
 public class UserDto extends UserUpdateDto {
     public String docName;
