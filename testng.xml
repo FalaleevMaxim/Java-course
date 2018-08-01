@@ -6,6 +6,7 @@
             <class name="ru.course.integration.tests.OrganizationControllerIT"/>
             <class name="ru.course.integration.tests.OfficeControllerIT"/>
             <class name="ru.course.integration.tests.UserControllerIT"/>
+            <class name="ru.course.integration.tests.DictionaryControllerIT"/>
         </classes>
     </test>
 </suite>
