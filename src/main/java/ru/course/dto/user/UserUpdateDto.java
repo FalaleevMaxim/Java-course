@@ -1,7 +1,8 @@
 package ru.course.dto.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.validation.constraints.NotNull;
 
-@JsonIgnoreProperties("docName")
-public class UserUpdateDto extends UserDto {
+public class UserUpdateDto extends UserCreateDto {
+    @NotNull
+    public Integer id;
 }

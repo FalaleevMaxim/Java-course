@@ -1,10 +1,10 @@
 package ru.course.dto.office;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotNull;
 
 public class OfficeFilterDto {
-    @JsonProperty(required = true)
-    public int orgId;
+    @NotNull
+    public Integer orgId;
     public String name;
     public String phone;
     public Boolean isActive;

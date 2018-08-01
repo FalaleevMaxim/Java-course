@@ -1,5 +1,7 @@
 package ru.course.dto.organization;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class OrganizationListItemDto {
     private int id;
     private String name;
@@ -21,6 +23,7 @@ public class OrganizationListItemDto {
         this.name = name;
     }
 
+    @JsonProperty("isActive")
     public boolean isActive() {
         return isActive;
     }

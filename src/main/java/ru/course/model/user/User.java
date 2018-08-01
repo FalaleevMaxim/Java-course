@@ -1,10 +1,12 @@
 package ru.course.model.user;
 
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 import ru.course.model.dictionary.Country;
 import ru.course.model.office.Office;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users", indexes = {
@@ -18,7 +20,7 @@ import javax.persistence.*;
         @Index(name = "user_phone", columnList = "phone"),
 })
 public class User {
-    private int id;
+    private Integer id;
     private String firstName;
     private String secondName;
     private String middleName;
@@ -30,12 +32,12 @@ public class User {
     private boolean identified;
 
     @Id
-    @GeneratedValue
-    public int getId() {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -82,20 +84,17 @@ public class User {
         this.phone = phone;
     }
 
-    @OneToOne(mappedBy = "user",
-            fetch = FetchType.LAZY,
-            cascade=CascadeType.ALL,
-            optional=false)
+    /*@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @LazyToOne(LazyToOneOption.FALSE)*/
     public UserDocument getDocument() {
         return document;
     }
 
     public void setDocument(UserDocument document) {
         this.document = document;
-        if(document.getUser()==null) document.setUser(this);
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "citizenship_code", referencedColumnName = "code")
     public Country getCitizenship() {
         return citizenship;

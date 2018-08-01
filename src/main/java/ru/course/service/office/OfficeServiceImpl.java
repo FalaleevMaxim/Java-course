@@ -48,7 +48,7 @@ public class OfficeServiceImpl implements OfficeService {
     @Override
     public void save(OfficeCreateDto dto) {
         checkOrgId(dto.getOrgId());
-        Office office = mapperFactory.getMapperFacade(OfficeDto.class, Office.class).map(dto);
+        Office office = mapperFactory.getMapperFacade(OfficeCreateDto.class, Office.class).map(dto);
         officeStorage.save(office);
     }
 

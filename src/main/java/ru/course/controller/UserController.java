@@ -43,6 +43,9 @@ public class UserController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseEntity<ResponseDto<SuccessResponseDto>> save(@RequestBody @Valid UserCreateDto dto, BindingResult binding) {
+        if (binding.hasErrors()) {
+            return errorResponse(binding);
+        }
         service.save(dto);
         return successResponse();
     }
