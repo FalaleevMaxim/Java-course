@@ -7,8 +7,6 @@ import ru.course.model.office.Office;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.Collections;
-import java.util.List;
 
 @Entity
 @Table(name = "users", indexes = {
@@ -86,20 +84,17 @@ public class User {
         this.phone = phone;
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    public List<UserDocument> getDocument() {
-        return Collections.singletonList(document);
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @LazyToOne(LazyToOneOption.FALSE)
+    public UserDocument getDocument() {
+        return document;
     }
 
-    public void setDocument(List<UserDocument> document) {
-        if (document == null || document.isEmpty()) {
-            this.document = null;
-        } else {
-            this.document = document.get(0);
-        }
+    public void setDocument(UserDocument document) {
+        this.document = document;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "citizenship_code", referencedColumnName = "code")
     public Country getCitizenship() {
         return citizenship;

@@ -4,6 +4,7 @@ import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.course.dto.office.OfficeCreateDto;
@@ -18,12 +19,22 @@ import ru.course.model.office.Office;
 import ru.course.model.organization.Organization;
 import ru.course.model.user.User;
 import ru.course.model.user.UserDocument;
+import ru.course.storage.user.UserStorage;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 @Configuration
 public class MapperConfig {
+
+    private final UserStorage userStorage;
+
+    @Autowired
+    public MapperConfig(UserStorage userStorage) {
+        this.userStorage = userStorage;
+    }
+
+
     @Bean
     MapperFactory mapperFactory() {
         DefaultMapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
@@ -99,7 +110,7 @@ public class MapperConfig {
                     Document document = new Document();
                     document.setCode(dto.docCode);
                     userDocument.setDocument(document);
-                    userDocument.setUser(user);
+                    user.setDocument(userDocument);
                 }
                 if (dto.citizenshipCode != null) {
                     Country country = new Country();
@@ -121,7 +132,10 @@ public class MapperConfig {
             public void mapAtoB(UserUpdateDto dto, User user, MappingContext context) {
                 userCreateDtoMapper().mapAtoB(dto, user, context);
                 user.setId(dto.id);
-                if(!user.getDocument().isEmpty()) user.getDocument().get(0).setId(dto.id);
+                if(user.getDocument()!=null){
+                    Integer udId = userStorage.userDocumentId(user);
+                    user.getDocument().setId(dto.id);
+                }
             }
         };
     }
@@ -142,11 +156,11 @@ public class MapperConfig {
                 dto.phone = user.getPhone();
                 dto.position = user.getPosition();
                 dto.isIdentified = user.isIdentified();
-                if(!user.getDocument().isEmpty()) {
-                    dto.docCode = user.getDocument().get(0).getDocument().getCode();
-                    dto.docName = user.getDocument().get(0).getDocument().getName();
-                    dto.docNumber = user.getDocument().get(0).getDocNumber();
-                    dto.docDate = new SimpleDateFormat("dd/mm/yyyy").format(user.getDocument().get(0).getDocDate());
+                if(user.getDocument()!=null) {
+                    dto.docCode = user.getDocument().getDocument().getCode();
+                    dto.docName = user.getDocument().getDocument().getName();
+                    dto.docNumber = user.getDocument().getDocNumber();
+                    dto.docDate = new SimpleDateFormat("dd/mm/yyyy").format(user.getDocument().getDocDate());
                 }
                 if(user.getCitizenship()!=null){
                     dto.citizenshipCode = user.getCitizenship().getCode();

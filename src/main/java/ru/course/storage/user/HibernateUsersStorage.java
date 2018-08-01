@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.course.dto.user.UserFilterDto;
 import ru.course.model.user.User;
+import ru.course.model.user.UserDocument;
 import ru.course.storage.AbstractHibernateStorage;
 
 import java.util.List;
@@ -34,6 +35,14 @@ public class HibernateUsersStorage extends AbstractHibernateStorage<User> implem
         if (filter.phone != null) criteria.add(Restrictions.eq("phone", filter.phone));
         if (filter.position != null) criteria.add(Restrictions.eq("position", filter.position));
         return criteria.list();
+    }
+
+    @Override
+    public Integer userDocumentId(User user) {
+        return (Integer) sessionFactory.getCurrentSession()
+                .createQuery("select ud.id from UserDocument ud where ud.user=:user")
+                .setEntity("user", user)
+                .uniqueResult();
     }
 
     @Override
